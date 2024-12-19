@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordscontainer
+  labels:
+    app: ordscontainer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ordscontainer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ordscontainer
+    spec:
+      containers:
+      - image: ords:prueba
+        imagePullPolicy: Never
+        env:
+        - name: DB_HOSTNAME
+          value: "10.96.177.92"
+        - name: DB_PORT
+          value: "1521"
+        - name: DB_SERVICENAME
+          value: "ORCLCDB"
+        - name: APEX_PUBLIC_USER_NAME
+          value: "ORDS_PUBLIC_USER"
+        - name: ORDS_PASS
+          valueFrom:
+           secretKeyRef:
+            name: ordspassword
+            key: password
+        name: ordscontainer
+        ports:
+        - containerPort: 8080
+          name: ordscontainer
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: ordscontainer
+spec:
+ type: LoadBalancer
+ selector:
+   app: ordscontainer
+ ports:
+   - name: client
+     protocol: TCP
+     port: 8080
+     targetPort: 8080
