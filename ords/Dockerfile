@@ -8,7 +8,8 @@ RUN dnf -y -q update
 RUN dnf -y install java-17-openjdk unzip zip which wget sudo man
 RUN dnf -y install ords
 RUN dnf clean all
-
+RUN mkdir /images
+COPY images /images
 COPY ./iniciar_ords.sh /opt/oracle/config_ords/
 RUN chmod +x /opt/oracle/config_ords/iniciar_ords.sh 
 

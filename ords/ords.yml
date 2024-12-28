@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ordscontainer
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ordscontainer
@@ -20,19 +20,18 @@ spec:
       - image: ords:prueba
         imagePullPolicy: Never
         env:
-        - name: DB_HOSTNAME
-          value: "10.96.177.92"
+        - name: HOSTNAME
+          value: "10.244.0.6"
         - name: DB_PORT
           value: "1521"
-        - name: DB_SERVICENAME
+        - name: DB_SERVICE
           value: "ORCLCDB"
-        - name: APEX_PUBLIC_USER_NAME
-          value: "ORDS_PUBLIC_USER"
-        - name: ORDS_PASS
-          valueFrom:
-           secretKeyRef:
-            name: ordspassword
-            key: password
+        - name: SYSDBA_USER
+          value: "SYS"
+        - name: SYSDBA_PASSWORD
+          value: "oracle"    
+        - name: ORDS_PASSWORD
+          value: "oracle"
         name: ordscontainer
         ports:
         - containerPort: 8080

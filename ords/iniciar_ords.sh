@@ -1,12 +1,12 @@
 export ORDS_HOME=/opt/oracle
 export ORDS_CONFIG=/opt/oracle/config_ords
 export ORDS_LOGS=${ORDS_CONFIG}/logs
-export DB_PORT=1521
-export DB_SERVICE=ORCLCDB
-export HOSTNAME=10.244.0.4
-export SYSDBA_USER=SYS
-export SYSDBA_PASSWORD=oracle
-export ORDS_PASSWORD=oracle
+export DB_PORT
+export DB_SERVICE
+export HOSTNAME
+export SYSDBA_USER
+export SYSDBA_PASSWORD
+export ORDS_PASSWORD
 
 
 /usr/local/bin/ords --config ${ORDS_CONFIG} install \
@@ -25,4 +25,4 @@ export ORDS_PASSWORD=oracle
 ${SYSDBA_PASSWORD}
 ${ORDS_PASSWORD}
 EOF
-/usr/local/bin/ords  --config /opt/oracle/config_ords serve
+/usr/local/bin/ords  --config /opt/oracle/config_ords serve --apex-images /images
