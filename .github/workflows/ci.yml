@@ -22,7 +22,3 @@ jobs:
 
     - name: Build and push to dockerhub
       uses: docker/build-push-action@v5
-      with:
-       context:
-       push: true
-       tags: k8s/githubaction:latest
