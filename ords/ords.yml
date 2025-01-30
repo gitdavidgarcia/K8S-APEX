@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ordscontainer
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: ordscontainer
@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Never
         env:
         - name: HOSTNAME
-          value: "10.244.0.6"
+          value: "10.244.0.7"
         - name: DB_PORT
           value: "1521"
         - name: DB_SERVICE
@@ -36,6 +36,10 @@ spec:
         ports:
         - containerPort: 8080
           name: ordscontainer
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "512m"
 ---
 apiVersion: v1
 kind: Service
@@ -48,5 +52,5 @@ spec:
  ports:
    - name: client
      protocol: TCP
-     port: 8080
+     port: 80
      targetPort: 8080

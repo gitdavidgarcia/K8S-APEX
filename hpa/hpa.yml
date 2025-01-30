@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ordscontainer
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ordscontainer
+  minReplicas: 16
+  maxReplicas: 16
+  targetCPUUtilizationPercentage: 60
