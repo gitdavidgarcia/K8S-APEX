@@ -16,12 +16,16 @@ spec:
       labels:
         app: ordscontainer
     spec:
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: ['sh', '-c', 'until nc -z db19c-oracle-db 1521; do echo waiting for database; sleep 2; done;']
       containers:
       - image: ords:prueba
         imagePullPolicy: Never
         env:
         - name: HOSTNAME
-          value: "10.244.0.7"
+          value: "db19c-oracle-db"
         - name: DB_PORT
           value: "1521"
         - name: DB_SERVICE
