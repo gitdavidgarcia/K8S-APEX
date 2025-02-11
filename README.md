@@ -1,20 +1,32 @@
 # K8S-APEX
 
-This project aims to deploy **APEX applications** on a **Kind Kubernetes cluster**.  
-
-In this first phase, it is assumed that you already have an **Oracle Database** running.
+This project aims to deploy **APEX applications** in HA on a **Kind Kubernetes cluster**.  
 
 ## ✨ Deployment Steps
 
-### 1. Clone the Repository  
-Clone the repository to your local machine:  
+### 1. Install Kind over Ubuntu 24 and create a kubernetes cluster
 ```bash
-git clone https://github.com/gitdavidgarcia/K8S-APEX/
+[ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.26.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+kind create cluster
 ```
 
----
+### 2- Deploy Oracle Database with Dataguard for HA
+Install cert-manager and Oracle DB Operator. For more information please check the official documentation 
+```bash
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml \
+kubectl apply -f database/oracle-database-operator.yaml
+```
+The only difference between the official documentation and this files is the storage option. I have choosen the standard tier upon oci-bv
+```bash
 
-### 2. Build the ORDS Docker Image  
+kubectl apply -f database/singleinstancedatabase_create.yaml
+kubectl apply -f database/singleinstancedatabase_standby.yaml
+kubectl apply -f database/dataguardbroker.yaml
+```
+### 3. Build the ORDS Docker Image  
 Navigate to the `ords` directory and build the Docker image: 
 It is important to download the Apex image folder into this directory because it is necessary for the Docker image
 ```bash
@@ -24,7 +36,7 @@ docker build -t ords:prueba .
 
 ---
 
-### 3. Upload the Image to the Kind Cluster  
+### 4. Upload the Image to the Kind Cluster  
 Load the built Docker image into the Kind cluster:  
 ```bash
 kind load docker-image ords:prueba
@@ -32,41 +44,17 @@ kind load docker-image ords:prueba
 
 ---
 
-### 4. Apply the Kubernetes Manifest  
+### 5. Apply the Kubernetes Manifest  
 Deploy the application by applying the Kubernetes manifest:  
 ```bash
 kubectl apply -f ords.yml
 ```
+### 6. Load Balancer and Autoescaling
 
----
-
-### 5. Access the Application Externally (Optional)  
-To access the application externally, forward a port. Replace `xxxxxxx` with the name of the running pod:  
+In order to achieve HA with ORDS, it is important to deploy a load balancer in front of ORDS pods. Moreover, we can have horizontal scaling for saving resources
 ```bash
-kubectl port-forward --address 0.0.0.0 xxxxxxx 80:8080
+kubectl apply -f metallb/metal.yaml
+kubectl apply -f hpa/hpa.yml
 ```
 
-💡 **Tip:** You can get the pod name using:  
-```bash
-kubectl get pods
-```
----
 
-## 📊 Notes
-- Ensure your Oracle Database is running and accessible by the ORDS application.  
-- Verify that the Kubernetes manifest (`ords.yml`) is correctly configured for your environment.  
----
-
-## 🛠️ Useful Commands  
-
-### Check Deployment Status  
-```bash
-kubectl get deployments
-kubectl get services
-kubectl exec --stdin --tty ordscontainer-6ccdd4f854-7gg6x -- /bin/bash
-```
-
-### List Running Pods  
-```bash
-kubectl get pods
-```
