@@ -10,7 +10,7 @@ RUN dnf -y install ords
 RUN dnf clean all
 RUN mkdir /images
 COPY images /images
-COPY ./iniciar_ords.sh /opt/oracle/config_ords/
+COPY iniciar_ords.sh /opt/oracle/config_ords/
 RUN chmod +x /opt/oracle/config_ords/iniciar_ords.sh 
 
 ENTRYPOINT [ "sh","-c","/opt/oracle/config_ords/iniciar_ords.sh" ]
