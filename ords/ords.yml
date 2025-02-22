@@ -17,9 +17,22 @@ spec:
         app: ordscontainer
     spec:
       initContainers:
-      - name: wait-for-db
-        image: busybox
-        command: ['sh', '-c', 'until nc -z sidb-sample 1521; do echo waiting for database; sleep 2; done;']
+      - name: liquibase
+        image: liquibase/prueba:latest
+        imagePullPolicy: Never    
+        env:
+        - name: HOSTNAME
+          value: "sidb-sample"
+        - name: DB_PORT
+          value: "1521"
+        - name: DB_SERVICE
+          value: "ORCLPDB1"
+        - name: SYSDBA_USER
+          value: "SYSTEM"
+        - name: SYSDBA_PASSWORD
+          value: "oracle"
+        - name: ORDS_PASSWORD
+          value: "oracle"
       containers:
       - image: ords:prueba
         imagePullPolicy: Never
@@ -29,7 +42,7 @@ spec:
         - name: DB_PORT
           value: "1521"
         - name: DB_SERVICE
-          value: "ORCL1"
+          value: "ORCLPDB1"
         - name: SYSDBA_USER
           value: "SYS"
         - name: SYSDBA_PASSWORD
@@ -40,10 +53,10 @@ spec:
         ports:
         - containerPort: 8080
           name: ordscontainer
-        resources:
-          limits:
-            memory: "1024Mi"
-            cpu: "512m"
+            #resources:
+          #    limits:
+          #   memory: "1024Mi"
+          #  cpu: "512m"
 ---
 apiVersion: v1
 kind: Service
