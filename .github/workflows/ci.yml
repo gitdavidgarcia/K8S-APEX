@@ -20,8 +20,17 @@ jobs:
        username: ${{ secrets.USERNAME }}
        password: ${{ secrets.K8S }}
 
-    - name: Build and push to dockerhub
+    - name: Build and push first Dockerfile
       uses: docker/build-push-action@v5
       with:
+        context: .
+        file: ./ords/Dockerfile 
         push: true
         tags: davidgarciabeta/k8s-apex:latest
+    - name: Build and push second Dockerfile
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./liquibase/Dockerfile  # Ruta al segundo Dockerfile
+        push: true
+        tags: davidgarciabeta/sqlcl-apex:latest
