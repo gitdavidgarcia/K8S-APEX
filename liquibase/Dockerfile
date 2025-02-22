@@ -59,9 +59,9 @@ ENV LIQUIBASE_HOME=/liquibase
 # Marker which indicates this is a Liquibase docker container
 ENV DOCKER_LIQUIBASE=true
 
-COPY docker-entrypoint.sh ./
+COPY ./liquibase/docker-entrypoint.sh ./
 #COPY liquibase.docker.properties ./
-COPY sqls/ ./
+COPY ./liquibase/sqls/ ./
 # Set user and group
 USER liquibase:liquibase
 
