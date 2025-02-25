@@ -1,0 +1,8 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: apex
+  namespace: flux-system
+spec:
+  image: davidgarciabeta/sqlcl-apex
+  interval: 1m0s

@@ -17,9 +17,6 @@ spec:
         app: ordscontainer
     spec:
       initContainers:
-      - name: wait-for-db
-        image: busybox
-        command: ['sh', '-c', 'until nc -z sidb-sample 1521; do echo waiting for database; sleep 2; done;']
       - name: liquibase
         image: davidgarciabeta/sqlcl-apex:latest
         env:
