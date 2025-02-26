@@ -21,7 +21,7 @@ spec:
         image: busybox
         command: ['sh', '-c', 'until nc -z sidb-sample 1521; do echo waiting for database; sleep 2; done;']
       - name: liquibase
-        image: davidgarciabeta/sqlcl-apex # {"$imagepolicy": "flux-system:podinfo:name"}
+        image: davidgarciabeta/sqlcl-apex:1.0.1 # {"$imagepolicy": "flux-system:podinfo:name"}
         env:
         - name: HOSTNAME
           value: "sidb-sample"
@@ -36,8 +36,7 @@ spec:
         - name: ORDS_PASSWORD
           value: "oracle"
       containers:
-      - image: ords:prueba
-        image: davidgarciabeta/k8s-apex # {"$imagepolicy": "flux-system:podinfo:name"}
+      - image: davidgarciabeta/k8s-apex
         env:
         - name: HOSTNAME
           value: "sidb-sample"
