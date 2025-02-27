@@ -36,7 +36,7 @@ spec:
         - name: ORDS_PASSWORD
           value: "oracle"
       containers:
-      - image: davidgarciabeta/k8s-apex
+      - image: davidgarciabeta/k8s-apex:1.0.1
         env:
         - name: HOSTNAME
           value: "sidb-sample"

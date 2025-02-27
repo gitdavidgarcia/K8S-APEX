@@ -26,11 +26,11 @@ jobs:
         context: .
         file: ./ords/Dockerfile 
         push: true
-        tags: davidgarciabeta/k8s-apex:latest
+        tags: davidgarciabeta/k8s-apex:1.0.1
     - name: Build and push second Dockerfile
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./liquibase/Dockerfile  # Ruta al segundo Dockerfile
         push: true
-        tags: davidgarciabeta/sqlcl-apex:latest
+        tags: davidgarciabeta/sqlcl-apex:1.0.1
