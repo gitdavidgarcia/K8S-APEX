@@ -4,6 +4,9 @@ metadata:
   name: apex
   namespace: argocd  
 spec:    
+  syncPolicy:
+    syncOptions:
+    - PruneLast=true
   project: default
   source:
     repoURL: https://github.com/gitdavidgarcia/K8S-APEX
